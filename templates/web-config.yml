@@ -1,0 +1,15 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: liceo-config
+  labels:
+    app: liceo
+data:
+    ADMIN_NAME: {{ .Values.web.deployment.admin.name}}
+    ADMIN_USERNAME: {{ .Values.web.deployment.admin.username }}    
+    ADMIN_PASSWORD: {{ .Values.web.deployment.admin.password }}
+    DATABASE_URL: {{ .Values.web.deployment.database.url }}
+    DATABASE_USERNAME: {{ .Values.web.deployment.database.username }}
+    DATABASE_PASSWORD: {{ .Values.web.deployment.database.password }}
+    DATABASE_DRIVER_CLASSNAME: {{ .Values.web.deployment.database.driver }}
+    STORAGE_PATH: {{ .Values.web.deployment.storagepath }}

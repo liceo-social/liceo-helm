@@ -1,0 +1,37 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: liceo-db
+  labels:
+    app: liceo
+    tier: db
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: liceo
+      tier: db
+  template:
+    metadata:
+      name: liceo-db
+      labels:
+        app: liceo
+        tier: db
+    spec:
+      containers:
+        - name: liceo-db
+          image: postgres:10-alpine
+          imagePullPolicy: Always
+          envFrom:
+            - configMapRef:
+                name: liceo-db-config       
+          volumeMounts:
+            - name: liceo-db-persistent-storage
+              mountPath: {{ .Values.db.deployment.disk_mount }}               
+          ports:
+            - containerPort: {{ .Values.db.deployment.port }}
+              name: liceo-db
+      volumes:
+        - name: liceo-db-persistent-storage
+          persistentVolumeClaim:
+            claimName: liceo-pv-claim

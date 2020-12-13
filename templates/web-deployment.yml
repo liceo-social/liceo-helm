@@ -1,0 +1,40 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: liceo-web
+  labels:
+    app: liceo
+    tier: web
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: liceo
+      tier: web
+  template:
+    metadata:
+      name: liceo-web
+      labels:
+        app: liceo
+        tier: web
+    spec:
+      containers:
+        - name: liceo-web        
+          image: liceo-docker-public.bintray.io/web:{{ .Values.web.deployment.version }}          
+          imagePullPolicy: Always
+          envFrom:
+            - configMapRef:
+                name: liceo-config
+          volumeMounts:
+            - name: liceo-web-persistent-storage
+              mountPath: {{ .Values.web.deployment.storagepath }}
+          resources:
+            requests:
+              memory: {{ .Values.web.deployment.resources.memory }}
+            limits:
+              memory: {{ .Values.web.deployment.resources.memory }}
+      volumes:
+        - name: liceo-web-persistent-storage
+          persistentVolumeClaim:
+            claimName: liceo-pv-claim
+            

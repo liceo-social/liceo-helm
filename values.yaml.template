@@ -1,0 +1,35 @@
+# Default values for liceo.
+# This is a YAML-formatted file.
+# Declare variables to be passed into your templates.
+
+db:
+  deployment:    
+    disk_mount: /var/data
+    pg_data: /var/data/liceo    
+    name: liceo
+    username: liceo
+    password: liceo
+    port: 5432
+  service:
+    port: 5432
+
+web:
+  service:  
+    port: 8080  
+  deployment:
+    resources:
+      memory: 2G
+    version: latest
+    locale: en
+    host: "https://liceo.examplesite.com"
+    database:
+      url: "jdbc:postgresql://liceo-db:5432/liceo"
+      username: liceo
+      password: liceo
+      driver: org.postgresql.Driver
+    storagepath: /app/storage
+    admin:
+      name: admin
+      username: admin
+      password: admin
+      email: admin@email.com

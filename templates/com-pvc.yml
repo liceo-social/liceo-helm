@@ -1,0 +1,15 @@
+{{- if (lookup "v1" "socseross" "pvc" "liceo-pv-claim") -}}
+{{- else -}}
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: liceo-pv-claim
+  labels:
+    app: liceo
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 1Gi
+{{- end -}}
