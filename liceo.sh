@@ -18,16 +18,20 @@ function list-deployments {
 }
 
 function backup-files {
-    BACKUP_FILENAME="liceo-fs-$(date +%Y%m%d%H%M).tar.gz"
+    if [[ -n "$1" ]]; then
+        BACKUP_FILENAME="liceo-fs-$(date +%Y%m%d%H%M).tar.gz"
 
-    log "(backup-files) getting liceo-web pod name"
-    POD_WEB_NAME=$(kubectl get pods -l tier=web | tail -1 | awk '{print $1}')
+        log "(backup-files) getting liceo-web pod name"
+        POD_WEB_NAME=$(kubectl get pods -l tier=web | tail -1 | awk '{print $1}')
 
-    log "(backup-files) creating tarball file"
-    kubectl exec $POD_WEB_NAME -- tar czf $BACKUP_FILENAME /tmp/
+        log "(backup-files) creating tarball file"
+        kubectl exec $POD_WEB_NAME -- tar czf $BACKUP_FILENAME $1
 
-    log "(backup-files) copying tarball file to local"
-    kubectl cp socseross/$POD_WEB_NAME:$BACKUP_FILENAME $BACKUP_FILENAME
+        log "(backup-files) copying tarball file to local"
+        kubectl cp socseross/$POD_WEB_NAME:$BACKUP_FILENAME $BACKUP_FILENAME
+    else
+        log "(backup-files) ./liceo.sh backup-files /directorio-remoto-a-guardar"
+    fi
 }
 
 function backup-db {
@@ -43,13 +47,8 @@ function backup-db {
     kubectl cp socseross/$POD_DB_NAME:/tmp/$BACKUP_FILENAME $BACKUP_FILENAME
 }
 
-function backup-all {
-    backup-files
-    backup-db
-}
-
 function usage {
-    echo "liceo.sh redeploy|list|backup-all|backup-db|backup-files"
+    echo "liceo.sh redeploy|list|backup-db|backup-files"
 }
 
 case $1 in 
@@ -59,14 +58,11 @@ case $1 in
     list)
         list-deployments
         ;;
-    backup-all)
-        backup-all
-        ;;
     backup-db)
         backup-db
         ;;
     backup-files)
-        backup-files
+        backup-files $2
         ;;
     *)
     usage

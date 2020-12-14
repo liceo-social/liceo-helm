@@ -21,7 +21,6 @@ web:
       memory: 2G
     version: latest
     locale: en
-    host: "https://liceo.examplesite.com"
     database:
       url: "jdbc:postgresql://liceo-db:5432/liceo"
       username: liceo

@@ -5,7 +5,7 @@ metadata:
   labels:
     app: liceo
 data:
-  PG_DATA: {{ .Values.db.deployment.pg_data }}
+  PGDATA: {{ .Values.db.deployment.pg_data }}
   POSTGRES_USER: {{ .Values.db.deployment.username }}
   POSTGRES_PASSWORD: {{ .Values.db.deployment.password }}
   POSTGRES_DB: {{ .Values.db.deployment.name }}
